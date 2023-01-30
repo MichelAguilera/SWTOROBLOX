@@ -36,6 +36,7 @@ function Unlockable:unlock(player_unlocks)
         if v == false then
             print("Not possible to upgrade, missing required unlockable.")
         else
+            print("Unlocking")
             self.isLocked = false
         end
     end

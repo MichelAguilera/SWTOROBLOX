@@ -53,7 +53,8 @@ function GuiFunctions.CreateAbilityFrames(Gui, Data)
 end
 
 function GuiFunctions.AbilityFrameButtonHit(Ability)
-    print("Pressed")
+    print("Pressed", Ability, type(Ability))
+
     Unlock_RemoteEvent:FireServer(Ability)
     -- :unlock()
 end

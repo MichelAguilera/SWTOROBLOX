@@ -2,6 +2,7 @@ local Progression = require(game:GetService("ServerScriptService").Server.Progre
 local Players = game:GetService("Players")
 local SendData_RemoteEvent = game:GetService("ReplicatedStorage").Common.ProgressionSystem_Events.SendData
 local Unlock_RemoteEvent = game:GetService("ReplicatedStorage").Common.ProgressionSystem_Events.UnlockUnlockable
+local RequestPD_RemoteFunction = game:GetService("ReplicatedStorage").Common.ProgressionSystem_Events.RequestPlayerData
 
 local function GetPlayerData(player)
     -- get from datastore
@@ -32,8 +33,13 @@ local function CreateActorObject(player)
     return ActorObject
 end
 
-Unlock_RemoteEvent.OnClientEvent:Connect(function(player, Ability)
-    Ability:unlock(require(player.player_data.ability_pool))
+Unlock_RemoteEvent.OnServerEvent:Connect(function(player, Ability)
+    print(player, Ability)
+
+    local pd = RequestPD_RemoteFunction
+
+
+    player.ability_pool:unlock(player, Ability)
 end)
 
 Players.PlayerAdded:Connect(function(player) 

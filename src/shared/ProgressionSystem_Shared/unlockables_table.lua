@@ -12,7 +12,7 @@ unlockables = {
         ["min_rank"]        = 1,
         ["min_grind"]       = 0,
         ["cost"]            = 1,
-        ["required_unlockable"] = {unlockables[2]}
+        ["required_unlockable"] = {"test_ab1"}
     },
 
     [2] = {

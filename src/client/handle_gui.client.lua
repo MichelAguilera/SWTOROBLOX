@@ -8,12 +8,12 @@ local PlayerGui = Player.PlayerGui
 
 local function init(data)
     LocalData[1] = data
-    print(LocalData)
+
     local AbilityFrames = GuiFunctions.CreateAbilityFrames(PlayerGui, data['ability_pool'])
-    print(AbilityFrames)
+
     for i, v in pairs(AbilityFrames) do
-        v.ImageButton.MouseButton1Up:Connect(function(btn)
-            GuiFunctions.AbilityFrameButtonHit(btn)
+        v.ImageButton.MouseButton1Up:Connect(function()
+            GuiFunctions.AbilityFrameButtonHit(v.NAME.Value)
         end)
     end
 
