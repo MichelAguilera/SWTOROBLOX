@@ -37,7 +37,7 @@ function Actor.set_ability_pool(_unlockables_table, _actor_abilities, _actor)
                                                     ability["min_grind"],
                                                     ability["cost"],
                                                     ability["required_unlockable"])
-            abilities_list[i] = _abilityObject
+            abilities_list[_abilityObject['name']] = _abilityObject
         end
     end
 

@@ -1,5 +1,5 @@
 -- DEPENDENCIES
-local Unlock_RemoteEvent = game:GetService("ReplicatedStorage").Common.ProgressionSystem_Events.UnlockUnlockable
+local Unlock_RemoteEvent = game:GetService("ReplicatedStorage").ProgressionSystem_Events.UnlockUnlockable
 
 -- FUNCTIONS
 local GuiFunctions = {}

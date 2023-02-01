@@ -1,5 +1,5 @@
 local unlockables_table = require(game:GetService("ReplicatedStorage").Common.ProgressionSystem_Shared.unlockables_table)
-local SendData_RemoteEvent = game:GetService("ReplicatedStorage").Common.ProgressionSystem_Events.SendData
+local SendData_RemoteEvent = game:GetService("ReplicatedStorage").ProgressionSystem_Events.SendData
 local LocalData = require(script.Parent.player_data)
 local GuiFunctions = require(script.Parent.GuiFunctions)
 
