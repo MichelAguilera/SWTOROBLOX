@@ -1,5 +1,6 @@
 -- DEPENDENCIES
-local Unlock_RemoteEvent = game:GetService("ReplicatedStorage").ProgressionSystem_Events.UnlockUnlockable
+local s = require(game:GetService("ReplicatedStorage"):WaitForChild("Common"):WaitForChild("Globals").service)
+local Unlock_RemoteEvent = s.rs.ProgressionSystem_Events.UnlockUnlockable
 
 -- FUNCTIONS
 local GuiFunctions = {}

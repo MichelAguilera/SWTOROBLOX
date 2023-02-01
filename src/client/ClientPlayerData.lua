@@ -1,0 +1,3 @@
+ClientPlayerData = {}
+
+return ClientPlayerData
