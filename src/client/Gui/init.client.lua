@@ -1,5 +1,16 @@
 local s = require(game:GetService("ReplicatedStorage"):WaitForChild("Common"):WaitForChild("Globals").service)
 
+-- DEPENDENCIES
+local UpdateGuiEvent = s.rs.Common.ProgressionSystem_Shared.Events:WaitForChild('UpdateGui')
+
+
+-- FUNCTIONS
+
+
+
+
+--[[
+
 local unlockables_table = require(s.rs.Common.ProgressionSystem_Shared.unlockables_table)
 local SendData_RemoteEvent = s.rs.ProgressionSystem_Events.SendData
 local LocalData = require(script.Parent.player_data)
@@ -28,3 +39,5 @@ end
 SendData_RemoteEvent.OnClientEvent:Connect(function(data) 
     init(data)
 end)
+
+]]

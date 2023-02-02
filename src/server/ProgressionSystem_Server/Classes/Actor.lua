@@ -2,7 +2,7 @@ local s = require(game:GetService("ReplicatedStorage"):WaitForChild("Common"):Wa
 
 -- DEPENDENCIES
 local AbilityClass = require(script.Parent.Ability)
-local abilities = require(s.rs.Common.ProgressionSystem_Shared.abilities)
+local abilities = require(s.rs.Common.ProgressionSystem_Shared.Templates.abilities)
 
 -- CLASS
 local Actor = {}
@@ -12,14 +12,14 @@ function Actor.new(player, args)
     local self = setmetatable({}, Actor)
 
     -- METADATA
-    self.player = player
+    self.Player = player
     self.faction = args.faction
-    self.specialty = args.specialization
+    self.specialty = args.specialty
     self.rank = 255 --TEMP
 
     -- STATS
-    self.level_int = args.level_points
-    self.ability_int = args.ability_points
+    self.level_int = args.level_points or 0
+    self.ability_int = args.ability_points or 0
 
     return self
 end
@@ -44,6 +44,10 @@ function Actor:unlock_ability(ability)
     local ability_name = ability['name']
     self:remove_ability_point(ability['cost'])
     self.ability_pool[ability_name]:unlock()
+end
+
+function Actor:repr()
+    print(self.Player.Name, self.faction, self.specialty, self.rank)
 end
 
 return Actor

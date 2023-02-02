@@ -1,5 +1,11 @@
 local s = require(game:GetService("ReplicatedStorage"):WaitForChild("Common"):WaitForChild("Globals").service)
 
+-- 1. Handle the preload (RUNS ON SERVER STARTUP)
+local Preload = require(s.sss.Server.ProgressionSystem_Server.Functions.Preload)
+Preload.createEvents(); print("Events created")
+Preload.finish(); print("Preload finished")
+
+--------------------------------------------------------------------------------
 -- DEPENDENCIES
 local ServerDataStorage = require(script.ProgressionSystem_Server.Functions.ServerDataStorage)
 local ActorStorage = require(script.ProgressionSystem_Server.ActorStorage)
@@ -13,7 +19,7 @@ local Actor = require(s.sss.Server.ProgressionSystem_Server.Classes.Actor)
 -- INIT SERVER
 
 --[[
-    1. Create the preload
+    1. Handle the preload
     2. Handle the player onJoin
     3. Load the data from the server to the client
     4. Handle the transfer of information between the client and the server
@@ -21,13 +27,15 @@ local Actor = require(s.sss.Server.ProgressionSystem_Server.Classes.Actor)
     6. The triggers
 ]]
 
--- 1. Create the RemoteEvents
-function CreateEvents()
-    
-end
-
 -- 2. Handle the player onJoin
 function OnPlayerJoin(Player)
+
+    --[[
+        The data will actually be from the DataStore,
+        or if no Data exists, the starting default will be applied here.
+        For now it is just test Data for the system.
+        This step exists in 2a:
+    ]]
     local tempargs = {
         -- METADATA
         ['player'] = Player,
@@ -43,7 +51,9 @@ function OnPlayerJoin(Player)
     -- a) Create Actor class for the player (Data from DataStore or new)
     local PlayerData = ServerDataStorage.mountPlayer(Player)
     local Actor_object = Actor.new(Player, tempargs)
-    local Actor = ActorStorage.mountActor(Actor)
+    local Actor = ActorStorage.mountActor(Actor_object)
+
+    ActorStorage.viewAllActors()
 
     -- c) Get the player's data from the server to the client
     -- b) Store the Actor class in the Server
@@ -71,6 +81,6 @@ end
 
 
 -- 6. The triggers
-s.plrs.PlayerAdded:Connect(function()
-    --
+s.plrs.PlayerAdded:Connect(function(Player)
+    OnPlayerJoin(Player)
 end)
