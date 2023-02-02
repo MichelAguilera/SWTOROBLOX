@@ -1,7 +1,7 @@
 local s = require(game:GetService("ReplicatedStorage"):WaitForChild("Common"):WaitForChild("Globals").service)
 
 -- DEPENDENCIES
-local DS_KEY = require(script.Parent.dskey)
+local DS_KEY = require(s.sss.Server.ProgressionSystem_Dependencies.dskey)
 local DS_service = s.dss
 local DS = DS_service.GetDataStore(DS_KEY)
 
@@ -18,7 +18,7 @@ function SDS.mountPlayer(Player)
     end
     SDS[Player.UserId] = PlayerData
 end
-    
+
 function SDS.dismountPlayer(Player)
     -- This function will eliminate the Player's data from the SDS module since it is no longer needed
     SDS[Player.UserId] = nil

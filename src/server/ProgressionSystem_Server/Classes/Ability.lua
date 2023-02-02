@@ -1,9 +1,9 @@
 -- CLASS
-local Unlockable = {}
-Unlockable.__index = Unlockable
+local Ability = {}
+Ability.__index = Ability
 
-function Unlockable.new(name, image_id, isLocked, isCommon, faction, specialization, byRank, byGrind, minRank, minGrind, cost, required_unlockable)
-    local self = setmetatable({}, Unlockable)
+function Ability.new(name, image_id, isLocked, isCommon, faction, specialization, byRank, byGrind, minRank, minGrind, cost, required_unlockable)
+    local self = setmetatable({}, Ability)
     self.name = name
     self.image_id = image_id
     self.isLocked = isLocked
@@ -15,13 +15,13 @@ function Unlockable.new(name, image_id, isLocked, isCommon, faction, specializat
     self.minRank = minRank
     self.minGrind = minGrind
     self.cost = cost
-    self.required_unlockable = required_unlockable
+    self.required_ability = required_unlockable
     return self
 end
 
-function Unlockable:unlock(player_unlocks)
+function Ability:unlock(player_unlocks)
     local bool_board = {}
-    for _, req_unlock in pairs(self.required_unlockable) do
+    for _, req_unlock in pairs(self.required_ability) do
         for _, unlock in pairs(player_unlocks) do
             if req_unlock ~= unlock then
                 continue
@@ -42,4 +42,4 @@ function Unlockable:unlock(player_unlocks)
     end
 end
 
-return Unlockable
+return Ability

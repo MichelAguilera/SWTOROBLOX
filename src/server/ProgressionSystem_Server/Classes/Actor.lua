@@ -1,6 +1,8 @@
+local s = require(game:GetService("ReplicatedStorage"):WaitForChild("Common"):WaitForChild("Globals").service)
+
 -- DEPENDENCIES
-local Unlockable = require(script.Parent.Unlockable)
-local unlockables_table = require(game:GetService("ReplicatedStorage").Common.ProgressionSystem_Shared.unlockables_table)
+local AbilityClass = require(script.Parent.Ability)
+local abilities = require(s.rs.Common.ProgressionSystem_Shared.abilities)
 
 -- CLASS
 local Actor = {}
@@ -8,14 +10,20 @@ Actor.__index = Actor
 
 function Actor.new(player, faction, specialization, level_points, ability_points, ability_pool, rank)
     local self = setmetatable({}, Actor)
+
+    -- METADATA
     self.player = player
     self.faction = faction
     self.specialty = specialization
+    self.rank = 255 --TEMP
+
+    -- STATS
     self.level_int = level_points
     self.ability_point = ability_points
-    self.ability_pool = Actor.set_ability_pool(unlockables_table, ability_pool, self)
 
-    self.rank = 255 --TEMP
+    -- UNLOCKED ABILITIES
+    self.ability_pool = Actor.set_ability_pool(abilities, ability_pool, self) -- Don't know if I should remove this class or not
+
     return self
 end
 
@@ -25,7 +33,7 @@ function Actor.set_ability_pool(_unlockables_table, _actor_abilities, _actor)
 
     for i, ability in pairs(_unlockables_table) do
         if ability['is_common'] == true or ability['specialization'] == _actor['specialty'] then
-            local _abilityObject = Unlockable.new(  ability["name"],
+            local _abilityObject = AbilityClass.new(  ability["name"],
                                                     ability["img_id"],
                                                     _actor_abilities[ability["name"]], 
                                                     ability["is_common"], 
@@ -36,7 +44,7 @@ function Actor.set_ability_pool(_unlockables_table, _actor_abilities, _actor)
                                                     ability["min_rank"],
                                                     ability["min_grind"],
                                                     ability["cost"],
-                                                    ability["required_unlockable"])
+                                                    ability["required_ability"])
             abilities_list[_abilityObject['name']] = _abilityObject
         end
     end

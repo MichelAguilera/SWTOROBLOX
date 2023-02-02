@@ -1,4 +1,4 @@
-unlockables = {
+abilities = {
 
     -- [ID] = {IMG_ID, NAME, IS_COMMON, FACTION, SPECIALIZATION, BY_RANK, BY_GRIND, MIN_RANK, MIN_GRIND, COST}
     [1] = {
@@ -45,4 +45,4 @@ unlockables = {
 
 }
 
-return unlockables
+return abilities

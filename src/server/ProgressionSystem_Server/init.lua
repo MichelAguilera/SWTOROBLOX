@@ -1,6 +1,6 @@
 local main = {
     ['Actor'] = require(script.Actor),
-    ['Unlockable'] = require(script.Unlockable)
+    ['Unlockable'] = require(script.Ability)
 }
 
 return main
