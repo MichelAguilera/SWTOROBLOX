@@ -26,6 +26,14 @@ function Preload.finish()
     local Loaded = Instance.new('BoolValue', GlobalFolder)
     Loaded.Name = 'Loaded'
     Loaded.Value = true
+
+    return Loaded.Value
+end
+
+function Preload.run_all()
+    Preload.createEvents()
+
+    return Preload.finish()
 end
 
 return Preload

@@ -1,5 +1,0 @@
-DataTransfer = {}
-
-
-
-return DataTransfer

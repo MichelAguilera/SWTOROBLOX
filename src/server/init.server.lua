@@ -1,9 +1,7 @@
 local s = require(game:GetService("ReplicatedStorage"):WaitForChild("Common"):WaitForChild("Globals").service)
 
 -- 1. Handle the preload (RUNS ON SERVER STARTUP)
-local Preload = require(s.sss.Server.ProgressionSystem_Server.Functions.Preload)
-Preload.createEvents(); print("Events created")
-Preload.finish(); print("Preload finished")
+local Preload = require(s.sss.Server.ProgressionSystem_Server.Functions.Preload).run_all()
 
 --------------------------------------------------------------------------------
 -- DEPENDENCIES
