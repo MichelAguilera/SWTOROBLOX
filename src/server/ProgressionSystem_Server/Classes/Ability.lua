@@ -2,20 +2,22 @@
 local Ability = {}
 Ability.__index = Ability
 
-function Ability.new(name, image_id, isLocked, isCommon, faction, specialization, byRank, byGrind, minRank, minGrind, cost, required_unlockable)
+function Ability.new(args)
     local self = setmetatable({}, Ability)
-    self.name = name
-    self.image_id = image_id
-    self.isLocked = isLocked
-    self.isCommon = isCommon
-    self.faction = faction
-    self.specialization = specialization
-    self.byRank = byRank
-    self.byGrind = byGrind
-    self.minRank = minRank
-    self.minGrind = minGrind
-    self.cost = cost
-    self.required_ability = required_unlockable
+
+    self.name = args.name
+    self.image_id = args.image_id
+    self.isLocked = args.isLocked
+    self.isCommon = args.isCommon
+    self.faction = args.faction
+    self.specialization = args.specialization
+    self.byRank = args.byRank
+    self.byGrind = args.byGrind
+    self.minRank = args.minRank
+    self.minGrind = args.minGrind
+    self.cost = args.cost
+    self.required_ability = args.required_unlockable
+    
     return self
 end
 

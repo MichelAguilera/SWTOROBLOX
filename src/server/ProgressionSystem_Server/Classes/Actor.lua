@@ -8,48 +8,20 @@ local abilities = require(s.rs.Common.ProgressionSystem_Shared.abilities)
 local Actor = {}
 Actor.__index = Actor
 
-function Actor.new(player, faction, specialization, level_points, ability_points, ability_pool, rank)
+function Actor.new(player, args)
     local self = setmetatable({}, Actor)
 
     -- METADATA
     self.player = player
-    self.faction = faction
-    self.specialty = specialization
+    self.faction = args.faction
+    self.specialty = args.specialization
     self.rank = 255 --TEMP
 
     -- STATS
-    self.level_int = level_points
-    self.ability_point = ability_points
-
-    -- UNLOCKED ABILITIES
-    self.ability_pool = Actor.set_ability_pool(abilities, ability_pool, self) -- Don't know if I should remove this class or not
+    self.level_int = args.level_points
+    self.ability_point = args.ability_points
 
     return self
-end
-
-function Actor.set_ability_pool(_unlockables_table, _actor_abilities, _actor)
-
-    local abilities_list = {}
-
-    for i, ability in pairs(_unlockables_table) do
-        if ability['is_common'] == true or ability['specialization'] == _actor['specialty'] then
-            local _abilityObject = AbilityClass.new(  ability["name"],
-                                                    ability["img_id"],
-                                                    _actor_abilities[ability["name"]], 
-                                                    ability["is_common"], 
-                                                    ability["faction"], 
-                                                    ability["specialization"], 
-                                                    ability["by_rank"], 
-                                                    ability["by_grind"], 
-                                                    ability["min_rank"],
-                                                    ability["min_grind"],
-                                                    ability["cost"],
-                                                    ability["required_ability"])
-            abilities_list[_abilityObject['name']] = _abilityObject
-        end
-    end
-
-    return abilities_list
 end
 
 function Actor:add_level_point(amount)

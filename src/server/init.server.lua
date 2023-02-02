@@ -1,14 +1,14 @@
 local s = require(game:GetService("ReplicatedStorage"):WaitForChild("Common"):WaitForChild("Globals").service)
 
 -- DEPENDENCIES
-local Players = s.plrs
-local ServerDataStorage = script.ProgressionSystem_Server.Functions.ServerDataStorage
+local ServerDataStorage = require(script.ProgressionSystem_Server.Functions.ServerDataStorage)
+local ActorStorage = require(script.ProgressionSystem_Server.ActorStorage)
 
 --- FUNCTIONS
-local DataTransfer = s.sss.Server.ProgressionSystem_Server.Functions.DataTransfer
+local DataTransfer = require(s.sss.Server.ProgressionSystem_Server.Functions.DataTransfer)
 
 ---- CLASSES
-local Actor = s.sss.Server.ProgressionSystem_Server.Classes.Actor
+local Actor = require(s.sss.Server.ProgressionSystem_Server.Classes.Actor)
 
 -- INIT SERVER
 
@@ -28,9 +28,22 @@ end
 
 -- 2. Handle the player onJoin
 function OnPlayerJoin(Player)
+    local tempargs = {
+        -- METADATA
+        ['player'] = Player,
+        ['faction'] = 'sith',
+        ['specialty'] = 'temp_spec',
+        ['rank'] = 255, --TEMP
+
+        -- STATS
+        ['level_int'] = 500,
+        ['ability_point'] = 4
+    }
+
     -- a) Create Actor class for the player (Data from DataStore or new)
-    ServerDataStorage.mountPlayer(Player)
-    
+    local PlayerData = ServerDataStorage.mountPlayer(Player)
+    local Actor_object = Actor.new(Player, tempargs)
+    local Actor = ActorStorage.mountActor(Actor)
 
     -- c) Get the player's data from the server to the client
     -- b) Store the Actor class in the Server
@@ -58,6 +71,6 @@ end
 
 
 -- 6. The triggers
-Players.PlayerAdded:Connect(function()
+s.plrs.PlayerAdded:Connect(function()
     --
 end)
