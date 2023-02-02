@@ -3,9 +3,10 @@ local s = require(game:GetService("ReplicatedStorage"):WaitForChild("Common"):Wa
 Preload = {}
 Preload.Events = {
     -- Type,        Name
-    {'RemoteEvent', 'SendData'},
+    {'RemoteEvent', 'DataSend'},
     {'RemoteEvent', 'UnlockAbility'},
-    {'BindableEvent', 'UpdateGui'}
+    {'BindableEvent', 'UpdateGui'},
+    {'RemoteFunction', 'DataRequest'}
 }
 
 function Preload.createEvents()
@@ -24,8 +25,7 @@ end
 function Preload.finish()
     local GlobalFolder = s.rs.Common.Globals
     local Loaded = Instance.new('BoolValue', GlobalFolder)
-    Loaded.Name = 'Loaded'
-    Loaded.Value = true
+    Loaded.Name, Loaded.Value = 'Loaded', true
 
     return Loaded.Value
 end

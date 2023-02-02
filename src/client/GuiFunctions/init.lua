@@ -1,5 +1,6 @@
 -- DEPENDENCIES
 local s = require(game:GetService("ReplicatedStorage"):WaitForChild("Common"):WaitForChild("Globals").service)
+local Roact = require(s.rs.Common.RojoModules.Roact)
 local Unlock_RemoteEvent = s.rs.Common.ProgressionSystem_Shared.Events:WaitForChild('UnlockAbility')
 
 -- FUNCTIONS

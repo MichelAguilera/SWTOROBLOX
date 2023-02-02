@@ -3,34 +3,20 @@ local s = require(game:GetService("ReplicatedStorage"):WaitForChild("Common"):Wa
 ----------------------------------------------------------------
 
 -- EVENTS
-local DataTransfer = s.rs.Common.ProgressionSystem_Shared.Events:WaitForChild('DataTransfer')
+local DataSend = s.rs.Common.ProgressionSystem_Shared.Events:WaitForChild('DataSend')
+local DataRequest = s.rs.Common.ProgressionSystem_Shared.Events:WaitForChild('DataRequest')
 
 -- FUNCTIONS
 DataTransfer = {}
 
--- request
-function DataTransfer.signalServer()
-
-    DataTransfer:FireServer()
+-- transfer: client --> server
+function DataTransfer.signalServer(args)
+    DataSend:FireServer(args)
 end
 
-function DataTransfer.signalClient()
-
-    DataTransfer:FireClient()
+-- request: client --> server --> client
+function DataTransfer.requestServer(args)
+    return DataRequest:InvokeServer(args)
 end
-
--- recieve
-function DataTransfer.recieveData(data)
-    return data
-end
-
--- recieve
-DataTransfer.OnServerEvent:Connect(function(data)
-    DataTransfer.recieveData({['data']=data})
-end)
-
-DataTransfer.OnClientEvent:Connect(function(player, data)
-    DataTransfer.recieveData({['player']=player, ['data']=data})
-end)
 
 return DataTransfer

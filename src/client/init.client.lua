@@ -6,28 +6,31 @@ local UpdateGuiEvent = s.rs.Common.ProgressionSystem_Shared.Events:WaitForChild(
 local ClientPlayerData = require(s.plrs.LocalPlayer.PlayerScripts.Client.ClientPlayerData)
 local GuiFunctions = require(script.GuiFunctions)
 
+-- SERVICES
+local DataTransfer = require(s.rs.Common.ProgressionSystem_Shared.Functions.DataTransfer)
+
 -- LOCAL VARIABLES
 local Player = s.plrs.LocalPlayer
 
 -- FUNCTIONS
 local function Init()
     --[[
-        x. Request Data from the Server
-            z. DataTransfer.signalServer(-- Tell server to send the Actor data to the client)
-            z. DataTransfer.recieveData(-- Recieve data here): add the return value of this function to ClientPlayerData
-            NOTE:   To be honest I don't know if the logic for the steps above will work as intended.
-                    I might need to change the way I communicate between the Client and the Server
+        1. Request Data from the Server √
+        2. Create the GUI 
+        3. Fill the GUI with the Data
 
-
-        x. Create the GUI
-        x. Fill the GUI with the Data
-
-        x. Set the triggers for clicking on Ability
-        x. Set the trigger for updating the GUI
+        4. Set the triggers for clicking on Ability
+        5. Set the trigger for updating the GUI
     ]]
 
-    local AbilityFrames = GuiFunctions.CreateAbilityFrames(Player.PlayerGui, data['ability_pool'])
+    -- 1. Request Data from the Server and stores it in ClientPlayerData
+    ClientPlayerData = DataTransfer.requestServer(Player)
 
+    -- 2. Create the GUI
+    -- a)
+    local AbilityFrames = GuiFunctions.CreateAbilityFrames(Player.PlayerGui, ClientPlayerData['ability_pool'])
+
+    -- b)
     for i, v in pairs(AbilityFrames) do
         v.ImageButton.MouseButton1Up:Connect(function()
             GuiFunctions.AbilityFrameButtonHit(v.NAME.Value)

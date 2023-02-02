@@ -8,8 +8,9 @@ local Preload = require(s.sss.Server.ProgressionSystem_Server.Functions.Preload)
 local ServerDataStorage = require(script.ProgressionSystem_Server.Functions.ServerDataStorage)
 local ActorStorage = require(script.ProgressionSystem_Server.ActorStorage)
 
---- FUNCTIONS
-local DataTransfer = require(s.sss.Server.ProgressionSystem_Server.Functions.DataTransfer)
+--- EVENTS
+local DataSend = s.rs.Common.ProgressionSystem_Shared.Events:WaitForChild('DataSend')
+local DataRequest = s.rs.Common.ProgressionSystem_Shared.Events:WaitForChild('DataRequest')
 
 ---- CLASSES
 local Actor = require(s.sss.Server.ProgressionSystem_Server.Classes.Actor)
@@ -58,18 +59,12 @@ function OnPlayerJoin(Player)
 end
 
 -- 3. Load the data from the server to the client
-local function LoadDataToPlayer(Player, Data)
-    -- Gets the data from the server to the client
+local function SendDataToPlayer(Player)
+    return ActorStorage[Player.UserId]
 end
 
 -- 4. Handle the transfer of information between the client and the server
-local function toClient(Player)
-    -- Transfers data to the client
-end
 
-local function fromClient(Data)
-    -- Recieves the data from the client
-end
 
 -- 5. Handle the players onLeave
 function OnPlayerLeave(Player)
@@ -79,6 +74,11 @@ end
 
 
 -- 6. The triggers
+
+-- On DataRequest:ServerInvoke
+DataRequest.OnServerInvoke = SendDataToPlayer
+
+-- On Player JOIN
 s.plrs.PlayerAdded:Connect(function(Player)
     OnPlayerJoin(Player)
 end)
