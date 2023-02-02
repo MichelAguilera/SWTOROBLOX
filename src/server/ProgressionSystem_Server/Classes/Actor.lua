@@ -19,7 +19,7 @@ function Actor.new(player, args)
 
     -- STATS
     self.level_int = args.level_points
-    self.ability_point = args.ability_points
+    self.ability_int = args.ability_points
 
     return self
 end
@@ -33,17 +33,17 @@ function Actor:remove_level_point(amount)
 end
 
 function Actor:give_ability_point(amount)
-    self.ability_point += amount
+    self.ability_int += amount
 end
 
 function Actor:remove_ability_point(amount)
-    self.ability_point -= amount
+    self.ability_int -= amount
 end
 
 function Actor:unlock_ability(ability)
-    local ability_id = ability[1]
+    local ability_name = ability['name']
     self:remove_ability_point(ability['cost'])
-    self.ability_pool[ability_id]:unlock()
+    self.ability_pool[ability_name]:unlock()
 end
 
 return Actor
