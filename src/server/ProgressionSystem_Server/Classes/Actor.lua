@@ -21,6 +21,9 @@ function Actor.new(player, args)
     self.level_int = args.level_points or 0
     self.ability_int = args.ability_points or 0
 
+    -- ABILITIES
+    self.abilities = args.abilities
+
     return self
 end
 

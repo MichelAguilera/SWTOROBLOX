@@ -1,11 +1,27 @@
 -- DEPENDENCIES
 local s = require(game:GetService("ReplicatedStorage"):WaitForChild("Common"):WaitForChild("Globals").service)
 local Roact = require(s.rs.Common.RojoModules.Roact)
-local Unlock_RemoteEvent = s.rs.Common.ProgressionSystem_Shared.Events:WaitForChild('UnlockAbility')
+local Elements = require(script.RoactElements)
 
 -- FUNCTIONS
 local GuiFunctions = {}
+GuiFunctions.__index = GuiFunctions
 
+function GuiFunctions.init(Gui, Data)
+    local self = setmetatable({}, GuiFunctions)
+
+    local Main = Elements.Main(Data)
+    self.handle = Roact.mount(Main, Gui)
+
+    return self
+end
+
+function GuiFunctions:update(Data)
+    local ScreenGui = Elements.ScreenGui(Data)
+    Roact.update(self.handle, ScreenGui)
+end
+
+--[[
 function GuiFunctions.update(Gui, Data)
     local ProgressionGui = Gui.ProgressionGui
 
@@ -60,5 +76,5 @@ function GuiFunctions.AbilityFrameButtonHit(Ability)
     Unlock_RemoteEvent:FireServer(Ability)
     -- :unlock()
 end
-
+]]
 return GuiFunctions

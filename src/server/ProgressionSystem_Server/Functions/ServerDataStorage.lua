@@ -16,7 +16,7 @@ function SDS.mountPlayer(Player)
         PlayerData = {}
         DS:SetAsync(Player.UserId, PlayerData)
     end
-    SDS[Player.UserId] = PlayerData
+    table.insert(SDS, Player.UserId, PlayerData)
 
     return SDS[Player.UserId]
 end

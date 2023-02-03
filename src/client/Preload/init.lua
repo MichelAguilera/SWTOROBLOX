@@ -3,13 +3,13 @@ local s = require(game:GetService("ReplicatedStorage"):WaitForChild("Common"):Wa
 Preload = {}
 Preload.Events = {
     -- Type,        Name
-    {'RemoteEvent', 'DataSend'},
-    {'RemoteEvent', 'UnlockAbility'},
-    {'RemoteFunction', 'DataRequest'}
+    {'BindableEvent', 'ChangedEvent'},
+    {'BindableEvent', 'UpdateGui'},
+    {'BindableEvent', 'AbilityButtonEvent'}
 }
 
 function Preload.createEvents()
-    local EventsFolder = s.rs.Common.ProgressionSystem_Shared.Events
+    local EventsFolder = s.plrs.LocalPlayer.PlayerScripts.Client.ClientEvents
 
     -- Loop through the events in the Preload.Events table
     for _, event in pairs(Preload.Events) do
@@ -22,8 +22,8 @@ function Preload.createEvents()
 end
 
 function Preload.finish()
-    local GlobalFolder = s.rs.Common.Globals
-    local Loaded = Instance.new('BoolValue', GlobalFolder)
+    local LocalFolder = script.Parent.Locals
+    local Loaded = Instance.new('BoolValue', LocalFolder)
     Loaded.Name, Loaded.Value = 'Loaded', true
 
     return Loaded.Value

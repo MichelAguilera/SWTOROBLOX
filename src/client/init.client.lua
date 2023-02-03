@@ -1,10 +1,17 @@
 local s = require(game:GetService("ReplicatedStorage"):WaitForChild("Common"):WaitForChild("Globals").service)
 
+-- Handle the preload (RUNS ON CLIENT STARTUP)
+local Preload = require(script.Preload).run_all()
+
 -- DEPENDENCIES
 local Loaded = s.rs.Common.Globals.Loaded.Value
-local UpdateGuiEvent = s.rs.Common.ProgressionSystem_Shared.Events:WaitForChild('UpdateGui')
 local ClientPlayerData = require(s.plrs.LocalPlayer.PlayerScripts.Client.ClientPlayerData)
 local GuiFunctions = require(script.GuiFunctions)
+
+-- CLIENT EVENTS
+local UpdateGuiEvent = s.plrs.LocalPlayer.PlayerScripts.Client.ClientEvents:WaitForChild('UpdateGui')
+local AbilityButtonEvent = s.plrs.LocalPlayer.PlayerScripts.Client.ClientEvents:WaitForChild('AbilityButtonEvent')
+local PlayerDataChangedEvent = s.plrs.LocalPlayer.PlayerScripts.Client.ClientEvents:WaitForChild('ChangedEvent')
 
 -- SERVICES
 local DataTransfer = require(s.rs.Common.ProgressionSystem_Shared.Functions.DataTransfer)
@@ -12,32 +19,42 @@ local DataTransfer = require(s.rs.Common.ProgressionSystem_Shared.Functions.Data
 -- LOCAL VARIABLES
 local Player = s.plrs.LocalPlayer
 
--- FUNCTIONS
+--- GUI
+local Gui = {
+    ['handle'] = nil
+}
+
+function Gui.create(Data)
+    Gui.handle = GuiFunctions.init(Player.PlayerGui, Data)
+    return Gui.handle
+end
+
+-- MAIN
 local function Init()
     --[[
         1. Request Data from the Server √
-        2. Create the GUI 
-        3. Fill the GUI with the Data
+        2. Create the GUI with Roact    √
+        3. Fill the GUI with the Data   √
 
         4. Set the triggers for clicking on Ability
         5. Set the trigger for updating the GUI
     ]]
 
     -- 1. Request Data from the Server and stores it in ClientPlayerData
-    ClientPlayerData = DataTransfer.requestServer(Player)
+    wait(1)
+    ClientPlayerData.mount(DataTransfer.requestServer(Player))
+    ClientPlayerData.display()
 
-    -- 2. Create the GUI
-    -- a)
-    local AbilityFrames = GuiFunctions.CreateAbilityFrames(Player.PlayerGui, ClientPlayerData['ability_pool'])
+    -- 2. Create the GUI, 3. Fill the GUI with the Data
+    local GUI = Gui.create(ClientPlayerData.Data.abilities)
 
-    -- b)
-    for i, v in pairs(AbilityFrames) do
-        v.ImageButton.MouseButton1Up:Connect(function()
-            GuiFunctions.AbilityFrameButtonHit(v.NAME.Value)
-        end)
-    end
+    -- 4. Set the triggers for clicking on Ability
+    AbilityButtonEvent.Event:Connect(function()
+        -- Send :unlock order to the server
+    end)
 
-    GuiFunctions.update(PlayerGui, data)
+    -- 5. Set the trigger for updating the GUI
+    UpdateGuiEvent.Event:Connect(function() GUI:update() end)
 end
 
 

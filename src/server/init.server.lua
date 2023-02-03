@@ -44,7 +44,52 @@ function OnPlayerJoin(Player)
 
         -- STATS
         ['level_int'] = 500,
-        ['ability_point'] = 4
+        ['ability_point'] = 4,
+
+        -- ABILITIES
+        ['abilities'] = {
+            [1] = {
+                ["img_id"]          = 3845386987,
+                ["name"]            = "test", 
+                ["is_common"]       = false, 
+                ["faction"]         = "sith", 
+                ["specialization"]  = "test_spec", 
+                ["by_rank"]         = true, 
+                ["by_grind"]        = true, 
+                ["min_rank"]        = 1,
+                ["min_grind"]       = 0,
+                ["cost"]            = 1,
+                ["required_unlockable"] = {"test_ab1"}
+            },
+        
+            [2] = {
+                ["img_id"]          = 3845386987,
+                ["name"]            = "test_ab1", 
+                ["is_common"]       = false, 
+                ["faction"]         = "sith", 
+                ["specialization"]  = "test_spec", 
+                ["by_rank"]         = true, 
+                ["by_grind"]        = true, 
+                ["min_rank"]        = 1,
+                ["min_grind"]       = 0,
+                ["cost"]            = 1,
+                ["required_unlockable"] = {}
+            },
+        
+            [3] = {
+                ["img_id"]          = 3845386987,
+                ["name"]            = "test_ab2", 
+                ["is_common"]       = false, 
+                ["faction"]         = "sith", 
+                ["specialization"]  = "test_spec", 
+                ["by_rank"]         = true, 
+                ["by_grind"]        = true, 
+                ["min_rank"]        = 1,
+                ["min_grind"]       = 0,
+                ["cost"]            = 1,
+                ["required_unlockable"] = {}
+            }
+        }
     }
 
     -- a) Create Actor class for the player (Data from DataStore or new)
@@ -52,7 +97,7 @@ function OnPlayerJoin(Player)
     local Actor_object = Actor.new(Player, tempargs)
     local Actor = ActorStorage.mountActor(Actor_object)
 
-    ActorStorage.viewAllActors()
+    -- ActorStorage.viewAllActors()
 
     -- c) Get the player's data from the server to the client
     -- b) Store the Actor class in the Server
@@ -60,6 +105,7 @@ end
 
 -- 3. Load the data from the server to the client
 local function SendDataToPlayer(Player)
+    print("Sending data to player")
     return ActorStorage[Player.UserId]
 end
 
