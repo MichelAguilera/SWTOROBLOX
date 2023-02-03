@@ -1,3 +1,6 @@
+# Others
+/example.lua
+
 # Project place file
 /SWTOROBLOX.rbxlx
 /SWTOROBLOX.rbxl
@@ -7,4 +10,4 @@
 /*.rbxl.lock
 
 # Secret Keys
-/dskey.lua
+/src/server/ProgressionSystem_Dependencies/dskey.lua

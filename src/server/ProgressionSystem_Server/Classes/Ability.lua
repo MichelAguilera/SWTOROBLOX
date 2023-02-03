@@ -32,11 +32,17 @@ function Ability.performChecks(_ability_requirement, abilities_available, actor,
 
     -- Check ability_point balance
     local ability_point_balance = actor.ability_int
-    -- print("Cost:", ability.cost, "Balance:", ability_point_balance)
     if ability.cost > ability_point_balance then
         print("Not enough ability points")
         return false
     end
+
+    -- Check XP
+    local player_xp = actor.level_int
+    if ability.minGrind > player_xp then
+        print("Not enough experience")
+        return false
+    end    
 
     -- Converts abilities_available:Array[Dict] into Array[String] (Array[Item.name])
     local unlocked_abilities = {}
