@@ -11,6 +11,7 @@ function Ability.new(args)
     self.isCommon = args.isCommon
     self.faction = args.faction
     self.specialization = args.specialization
+    self.alignment = args.alignment -- TODO
     self.byRank = args.byRank
     self.byGrind = args.byGrind
     self.minRank = args.minRank
