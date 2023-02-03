@@ -4,7 +4,8 @@ Preload = {}
 Preload.Events = {
     -- Type,        Name
     {'RemoteEvent', 'DataSend'},
-    {'RemoteEvent', 'UnlockAbility'},
+    {'RemoteEvent', 'PlayerDataChanged'},
+    {'RemoteFunction', 'UnlockAbility'},
     {'RemoteFunction', 'DataRequest'}
 }
 

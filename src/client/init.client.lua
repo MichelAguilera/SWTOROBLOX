@@ -8,6 +8,10 @@ local Loaded = s.rs.Common.Globals.Loaded.Value
 local ClientPlayerData = require(s.plrs.LocalPlayer.PlayerScripts.Client.ClientPlayerData)
 local GuiFunctions = require(script.GuiFunctions)
 
+-- REMOTE EVENTS / FUNCTIONS
+local UnlockAbility = s.rs.Common.ProgressionSystem_Shared.Events:WaitForChild('UnlockAbility')
+local PlayerDataChangedInServerEvent = s.rs.Common.ProgressionSystem_Shared.Events:WaitForChild('PlayerDataChanged')
+
 -- CLIENT EVENTS
 local UpdateGuiEvent = s.plrs.LocalPlayer.PlayerScripts.Client.ClientEvents:WaitForChild('UpdateGui')
 local AbilityButtonEvent = s.plrs.LocalPlayer.PlayerScripts.Client.ClientEvents:WaitForChild('AbilityButtonEvent')
@@ -29,6 +33,8 @@ function Gui.create(Data)
     return Gui.handle
 end
 
+
+
 -- MAIN
 local function Init()
     --[[
@@ -42,19 +48,43 @@ local function Init()
 
     -- 1. Request Data from the Server and stores it in ClientPlayerData
     wait(1)
-    ClientPlayerData.mount(DataTransfer.requestServer(Player))
-    ClientPlayerData.display()
+    ClientPlayerData.set(DataTransfer.requestServer(Player))
+    -- ClientPlayerData.display()
 
     -- 2. Create the GUI, 3. Fill the GUI with the Data
-    local GUI = Gui.create(ClientPlayerData.Data.abilities)
+    local GUI = Gui.create({
+        ['abilities'] = ClientPlayerData.Data.abilities,
+        ['numbers'] = {
+            ['level_int'] = ClientPlayerData.Data.level_int,
+            ['ability_int'] = ClientPlayerData.Data.ability_int
+        }
+    })
 
     -- 4. Set the triggers for clicking on Ability
-    AbilityButtonEvent.Event:Connect(function()
+    AbilityButtonEvent.Event:Connect(function(ability_name, ability_requirement)
+        -- print(ability_name, ability_requirement)
         -- Send :unlock order to the server
+        -- Checks will be performed by the server
+        if UnlockAbility:InvokeServer(ability_name, ability_requirement) then
+            -- Change GUI to reflect the Unlock (The unlock already processed in server, this is the Local consequence)
+            print("Client recieved confirmation")
+        else
+            print("Unable to unlock ability")
+        end
+        ClientPlayerData.set(DataTransfer.requestServer(Player))
+        UpdateGuiEvent:Fire()
     end)
 
     -- 5. Set the trigger for updating the GUI
-    UpdateGuiEvent.Event:Connect(function() GUI:update() end)
+    UpdateGuiEvent.Event:Connect(function() 
+        Gui.handle:update({
+            ['abilities'] = ClientPlayerData.Data.abilities,
+            ['numbers'] = {
+                ['level_int'] = ClientPlayerData.Data.level_int,
+                ['ability_int'] = ClientPlayerData.Data.ability_int
+            }
+        })
+    end)
 end
 
 

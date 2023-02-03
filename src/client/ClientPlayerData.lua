@@ -6,7 +6,7 @@ ClientPlayerData = {
     Data = {}
 }
 
-function ClientPlayerData.mount(Data)
+function ClientPlayerData.set(Data)
     ClientPlayerData.Data = Data
     ChangedEvent:Fire()
 end

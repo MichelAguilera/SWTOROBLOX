@@ -22,9 +22,19 @@ function Actor.new(player, args)
     self.ability_int = args.ability_points or 0
 
     -- ABILITIES
-    self.abilities = args.abilities
+    self.abilities = Actor.createAbilityClasses(args.abilities)
 
     return self
+end
+
+function Actor.createAbilityClasses(array)
+    -- print("creating AbilityClasses")
+    local new_array = {}
+    for i, ability_data in ipairs(array) do
+        local abilityClass = AbilityClass.new(ability_data)
+        table.insert(new_array, abilityClass)
+    end
+    return new_array
 end
 
 function Actor:add_level_point(amount)
@@ -43,10 +53,25 @@ function Actor:remove_ability_point(amount)
     self.ability_int -= amount
 end
 
-function Actor:unlock_ability(ability)
-    local ability_name = ability['name']
-    self:remove_ability_point(ability['cost'])
-    self.ability_pool[ability_name]:unlock()
+function Actor:unlock_ability(ability_name, ability_requirement, ability)
+    local function GetIndexOfValue(tabl, value)
+        -- print(tabl, value)
+        for index, Ability in ipairs(tabl) do
+            if Ability.name == value then
+                return index
+            end
+        end
+    end
+
+    local abilities_available = self.abilities
+    local _Ability = abilities_available[GetIndexOfValue(abilities_available, ability_name)]
+
+    -- NOTE: The unlock will have to run through Actor class instead of here; to check the ability points available.
+    if ability:unlock(ability_requirement, abilities_available, self) then
+        self:remove_ability_point(ability.cost)
+        return true
+    end
+    return false
 end
 
 function Actor:repr()
