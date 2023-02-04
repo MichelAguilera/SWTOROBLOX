@@ -39,6 +39,7 @@ function OnPlayerJoin(Player)
         For now it is just test Data for the system.
         This step exists in 2a:
     ]]
+    local tempabilities = require(s.rs.Common.ProgressionSystem_Shared.Templates.abilities)
     local tempargs = {
         -- METADATA
         ['player'] = Player,
@@ -47,55 +48,15 @@ function OnPlayerJoin(Player)
         ['rank'] = 255, --TEMP
 
         -- STATS
-        ['level_points'] = 500,
-        ['ability_points'] = 2,
+        ['level_points'] = 300,
+        ['ability_points'] = 500,
 
         -- ABILITIES
         ['abilities'] = {
-            [1] = {
-                ["img_id"]          = 3845386987,
-                ["name"]            = "test", 
-                ["is_common"]       = false, 
-                ["faction"]         = "sith", 
-                ["specialization"]  = "test_spec", 
-                ["by_rank"]         = true, 
-                ["by_grind"]        = true, 
-                ["min_rank"]        = 1,
-                ["min_grind"]       = 0,
-                ["cost"]            = 1,
-                ["required_unlockable"] = {"test_ab1"},
-                ["isLocked"]        = true
-            },
-        
-            [2] = {
-                ["img_id"]          = 3845386987,
-                ["name"]            = "test_ab1", 
-                ["is_common"]       = false, 
-                ["faction"]         = "sith", 
-                ["specialization"]  = "test_spec", 
-                ["by_rank"]         = true, 
-                ["by_grind"]        = true, 
-                ["min_rank"]        = 1,
-                ["min_grind"]       = 0,
-                ["cost"]            = 1,
-                ["required_unlockable"] = {},
-                ["isLocked"]        = true
-            },
-        
-            [3] = {
-                ["img_id"]          = 3845386987,
-                ["name"]            = "test_ab2", 
-                ["is_common"]       = false, 
-                ["faction"]         = "sith", 
-                ["specialization"]  = "test_spec", 
-                ["by_rank"]         = true, 
-                ["by_grind"]        = true, 
-                ["min_rank"]        = 1,
-                ["min_grind"]       = 0,
-                ["cost"]            = 1,
-                ["required_unlockable"] = {},
-                ["isLocked"]        = true
-            }
+            tempabilities.Pull,
+            tempabilities.Push,
+            tempabilities.Spark,
+            tempabilities.Lightning
         }
     }
 
@@ -137,10 +98,11 @@ UnlockAbility.OnServerInvoke = function(player, ability_name, ability_requiremen
     local _Ability = abilities_available[GetIndexOfValue(abilities_available, ability_name)]
 
     -- NOTE: The unlock will have to run through Actor class instead of here; to check the ability points available.
-    if _Actor:unlock_ability(_Ability.name, ability_requirement, _Ability) then
+    local success, _error = _Actor:unlock_ability(_Ability.name, ability_requirement, _Ability)
+    if success then
         return true
     end
-    return false
+    return false, _error
 end
 
 -- 5. Handle the players onLeave

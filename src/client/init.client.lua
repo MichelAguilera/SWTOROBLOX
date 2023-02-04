@@ -65,11 +65,11 @@ local function Init()
         -- print(ability_name, ability_requirement)
         -- Send :unlock order to the server
         -- Checks will be performed by the server
-        if UnlockAbility:InvokeServer(ability_name, ability_requirement) then
-            -- Change GUI to reflect the Unlock (The unlock already processed in server, this is the Local consequence)
-            print("Client recieved confirmation")
+        local success, _error = UnlockAbility:InvokeServer(ability_name, ability_requirement)
+        if not success then
+            print(_error)
         else
-            print("Unable to unlock ability")
+            -- Change GUI to reflect the Unlock (The unlock already processed in server, this is the Local consequence)
         end
         ClientPlayerData.set(DataTransfer.requestServer(Player))
         UpdateGuiEvent:Fire()

@@ -60,7 +60,8 @@ function Elements.Ability(props) -- props = Ability
         Size = UDim2.fromOffset(50, 50)
     }, {
         Roact.createElement("UICorner"),
-        Roact.createElement(Elements.AbilityButton, props)
+        Roact.createElement(Elements.AbilityButton, props),
+        Roact.createElement('StringValue', {Value = props.name})
     })
 end
 

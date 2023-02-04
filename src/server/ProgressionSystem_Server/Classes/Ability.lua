@@ -34,15 +34,13 @@ function Ability.performChecks(_ability_requirement, abilities_available, actor,
     -- Check ability_point balance
     local ability_point_balance = actor.ability_int
     if ability.cost > ability_point_balance then
-        print("Not enough ability points")
-        return false
+        return false, "Not enough ability points"
     end
 
     -- Check XP
     local player_xp = actor.level_int
     if ability.minGrind > player_xp then
-        print("Not enough experience")
-        return false
+        return false, "Not enough experience"
     end    
 
     -- Converts abilities_available:Array[Dict] into Array[String] (Array[Item.name])
@@ -80,8 +78,7 @@ function Ability.performChecks(_ability_requirement, abilities_available, actor,
             continue
         end
     end
-    print("Not possible to upgrade, missing required unlockable.")
-    return false
+    return false, "Not possible to upgrade, missing required unlockable."
 end
 
 function Ability:unlock(ability_requirement, abilities_available, actor) -- Array[index = String], Array[index = Dict[Ability]]
@@ -93,20 +90,18 @@ function Ability:unlock(ability_requirement, abilities_available, actor) -- Arra
     
     -- 1. Check if the ability isLocked, if false: exit
     if self.isLocked == false then -- isLocked needs to be true in order to continue
-        -- print(self.name, self.isLocked)
-        print(self.name, "is already unlocked")
-        return false
+        return false, self.name.." is already unlocked"
     else
         -- print("Check #1 passed: self.isLocked == true")
     end
 
     -- 3. Unlock the ability
-    if Ability.performChecks(ability_requirement, abilities_available, actor, self) then
-        print("Unlocking "..self.name)
+    local success, _error = Ability.performChecks(ability_requirement, abilities_available, actor, self)
+    if success then
         self.isLocked = false
-        return true
+        return true, "Unlocking "..self.name
     else
-        return false
+        return false, _error
     end
 end
 

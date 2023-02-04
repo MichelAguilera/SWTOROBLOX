@@ -67,11 +67,12 @@ function Actor:unlock_ability(ability_name, ability_requirement, ability)
     local _Ability = abilities_available[GetIndexOfValue(abilities_available, ability_name)]
 
     -- NOTE: The unlock will have to run through Actor class instead of here; to check the ability points available.
-    if ability:unlock(ability_requirement, abilities_available, self) then
+    local success, _error = ability:unlock(ability_requirement, abilities_available, self)
+    if success then
         self:remove_ability_point(ability.cost)
         return true
     end
-    return false
+    return false, _error
 end
 
 function Actor:repr()
