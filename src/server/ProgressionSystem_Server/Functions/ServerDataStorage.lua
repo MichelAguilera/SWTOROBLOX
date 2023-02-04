@@ -22,11 +22,8 @@ function legacy.default(key)
         ['ability_points'] = 500, -- TEMP
     
         -- ABILITIES
-        ['abilities'] = { -- TEMP
-            tempabilities.Pull,
-            tempabilities.Push,
-            tempabilities.Spark,
-            tempabilities.Lightning
+        ['abilities'] = { -- TEMP / CANNOT BE CLASSES, MUST BE NAME STRINGS
+            'Pull', 'Push', 'Spark', 'Lightning'
         }
     }
 
@@ -34,6 +31,7 @@ function legacy.default(key)
 end
 
 function legacy.save(datastore, key, data)
+    print('Saving', time())
     local success, errorMessage = pcall(function()
         datastore:SetAsync(key, data)
     end)
@@ -66,6 +64,8 @@ end
 function SDS.unmountPlayer(Player) -- I don't know if this is safe or not
     local function attemptSave(attempts)  -- Recursive
         local attempts = attempts or 0
+        
+        print(attempts)
 
         local success, errorMessage = legacy.save(DS, Player.UserId, SDS[Player.UserId])
 
@@ -74,9 +74,12 @@ function SDS.unmountPlayer(Player) -- I don't know if this is safe or not
         if not success then
             warn(errorMessage)
             attemptSave(attempts + 1)
+        else
+            print(DS:GetAsync(Player.UserId))
         end
     end
 
+    attemptSave(0)
     SDS[Player.UserId] = nil
 end
 

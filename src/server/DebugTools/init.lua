@@ -13,7 +13,7 @@ local commands = {
     ['prefix'] = '/',
     ['commands'] = {
         ['/fsave'] = function(args)
-            print('fsave called with', args)
+            -- print('fsave called with', args)
             local sds = require(s.sss.Server.ProgressionSystem_Server.Functions.ServerDataStorage)
             sds.unmountPlayer(args.Player)
         end -- Forces save
@@ -21,7 +21,7 @@ local commands = {
 }
 
 function DebugTools.init()
-    print("DebugTools.init")
+    -- print("DebugTools.init")
 
     local events_folder = Instance.new('Folder', script.Parent)
     events_folder.Name = 'events'
@@ -31,11 +31,11 @@ function DebugTools.init()
 end
 
 function DebugTools.onChat(String)
-    print("DebugTools.onChat", String)
+    -- print("DebugTools.onChat", String)
     -- print(String, string.split(String, '')[1])
-    -- if string.split(String, '')[1] == commands.prefix then
-    --     commands.commands[String]({['Player'] = s.plrs:WaitForChild("MitxelReinhardt")})
-    -- end
+    if string.split(String, '')[1] == commands.prefix then
+        commands.commands[String]({['Player'] = s.plrs.MitxelReinhardt})
+    end
     parser.run(String)
 end
 

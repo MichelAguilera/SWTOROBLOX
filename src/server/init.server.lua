@@ -71,7 +71,6 @@ function OnPlayerJoin(Player)
     -- b) Store the Actor class in the Server
 
     Player.Chatted:Connect(function(String)
-        print("Firig")
         require(s.sss.Server.DebugTools).onChat(String)
     end)
 end

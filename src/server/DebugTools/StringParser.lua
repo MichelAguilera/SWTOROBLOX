@@ -9,21 +9,13 @@ function StringParser.SeparatePrefix(main_arg)
 end
 
 function StringParser.run(args)
-    local sep_args = StringParser.SeparateArgs(args)
-    local sep_prefix = StringParser.SeparatePrefix(sep_args[1])
-    table.remove(sep_prefix, 1)
-    table.remove(sep_args, 1)
-    table.concat(sep_prefix, '') -- TEST THIS
-
     local command = {}
-    table.insert(command, sep_prefix)
     
-    for _, v in ipairs(sep_args) do
-
+    for _, v in ipairs(StringParser.SeparateArgs(args)) do
         table.insert(command, v)
     end
 
-    print(command)
+    -- print(command)
     return command
 end
 
