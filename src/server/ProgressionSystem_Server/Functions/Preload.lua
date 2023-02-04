@@ -18,6 +18,9 @@ function Preload.createEvents()
         e.Name = event[2]
     end
 
+    -- DEBUG TOOLS
+    require(s.sss.Server.DebugTools).init()
+
     -- Return a boolean indicating success
     return true
 end

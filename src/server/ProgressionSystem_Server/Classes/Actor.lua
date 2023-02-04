@@ -13,8 +13,8 @@ function Actor.new(player, args)
 
     -- METADATA
     self.Player = player
-    self.faction = args.faction
-    self.specialty = args.specialty
+    self.faction = args.faction or 'neutral'
+    self.specialty = args.specialty or 'none'
     self.rank = 255 --TEMP
 
     -- STATS

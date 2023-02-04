@@ -62,13 +62,18 @@ function OnPlayerJoin(Player)
 
     -- a) Create Actor class for the player (Data from DataStore or new)
     local PlayerData = ServerDataStorage.mountPlayer(Player)
-    local Actor_object = Actor.new(Player, tempargs)
+    local Actor_object = Actor.new(Player, PlayerData)
     local Actor = ActorStorage.mountActor(Actor_object)
 
     -- ActorStorage.viewAllActors()
 
     -- c) Get the player's data from the server to the client
     -- b) Store the Actor class in the Server
+
+    Player.Chatted:Connect(function(String)
+        print("Firig")
+        require(s.sss.Server.DebugTools).onChat(String)
+    end)
 end
 
 -- 3. Load the data from the server to the client
@@ -100,8 +105,13 @@ UnlockAbility.OnServerInvoke = function(player, ability_name, ability_requiremen
     -- NOTE: The unlock will have to run through Actor class instead of here; to check the ability points available.
     local success, _error = _Actor:unlock_ability(_Ability.name, ability_requirement, _Ability)
     if success then
+        print(_Actor)
+
         return true
     end
+
+    print(_Actor)
+
     return false, _error
 end
 
@@ -109,6 +119,9 @@ end
 function OnPlayerLeave(Player)
     -- a) Save the player's data to the Database
     -- b) Remove the player's data from the server
+
+    ServerDataStorage.updateFromServer(Player, ActorStorage[Player.UserId])
+    ServerDataStorage.unmountPlayer(Player)
 end
 
 -- X. The triggers
@@ -119,4 +132,9 @@ DataRequest.OnServerInvoke = SendDataToPlayer
 -- On Player JOIN
 s.plrs.PlayerAdded:Connect(function(Player)
     OnPlayerJoin(Player)
+end)
+
+-- On Player LEAVE
+s.plrs.PlayerRemoving:Connect(function(Player)
+    OnPlayerLeave(Player)
 end)

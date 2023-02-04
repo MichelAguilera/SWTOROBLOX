@@ -9,6 +9,10 @@ s.w = game:GetService("Workspace")
 
 -- SERVICES
 s.plrs = game:GetService("Players")
-s.dss = game:GetService("DataStoreService")
+s.dss = game:GetService("DataStoreService") -- LEGACY
+s.chat = game:GetService("Chat")
+
+-- MODULES
+s.ds2 = s.rs.Common:WaitForChild('RojoModules'):WaitForChild('DataStore2') -- PLANNED
 
 return s
