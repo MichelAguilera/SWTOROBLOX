@@ -28,8 +28,10 @@ end
 
 function Ability.performChecks(_ability_requirement, abilities_available, actor, ability)
 
-    -- print(_ability_requirement, abilities_available, actor, ability)
+    print(_ability_requirement, abilities_available, actor, ability)
     -- 2. Check if the ability meets requirements, if false: exit
+    -- override the parameter _ability_requirement
+    local _ability_requirement = ability.required_ability
 
     -- Check ability_point balance
     local ability_point_balance = actor.ability_int
