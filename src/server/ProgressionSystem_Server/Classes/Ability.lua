@@ -6,19 +6,21 @@ function Ability.new(args)
     local self = setmetatable({}, Ability)
 
     self.name = args.name
-    self.image_id = args.img_id
+    self.image_id = args.img_id --
     self.isLocked = args.isLocked
     self.isCommon = args.isCommon
     self.faction = args.faction
     self.specialization = args.specialization
-    self.alignment = args.alignment -- TODO
+    self.alignment = args.alignment or 'none'-- TODO --
     self.byRank = args.byRank
     self.byGrind = args.byGrind
     self.minRank = args.minRank
     self.minGrind = args.minGrind
     self.cost = args.cost
-    self.required_ability = args.required_unlockable
+    self.required_ability = args.required_unlockable --
     
+    -- print('Ability: '..self.name, self)
+
     return self
 end
 
@@ -28,7 +30,7 @@ end
 
 function Ability.performChecks(_ability_requirement, abilities_available, actor, ability)
 
-    print(_ability_requirement, abilities_available, actor, ability)
+    -- print(_ability_requirement, abilities_available, actor, ability)
     -- 2. Check if the ability meets requirements, if false: exit
     -- override the parameter _ability_requirement
     local _ability_requirement = ability.required_ability

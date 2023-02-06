@@ -8,6 +8,8 @@ local DS = DS_service:GetDataStore(DS_KEY)
 -- Class dependencies
 local Ability = require(s.sss.Server.ProgressionSystem_Server.Classes.Ability)
 local AbilityList = require(s.rs.Common.ProgressionSystem_Shared.Templates.abilities)
+local Actor = require(s.sss.Server.ProgressionSystem_Server.Classes.Actor)
+local ActorStorage = require(s.sss.Server.ProgressionSystem_Server.ActorStorage)
 
 -- DataStore LEGACY functions
 legacy = {}
@@ -19,43 +21,48 @@ function legacy.dataUnpack(data)
 
     -- Abilities
     for i, ability in pairs(data.abilities) do
-        local ability_object = Ability.new(AbilityList[ability])
-        data.abilities[i] = ability_object
+        local ability_data = AbilityList[ability[1]]
+        data.abilities[i] = ability_data
+        data.abilities[i].isLocked = ability[2]
+    end
+
+    local unpacked = Actor.new(data.player, data)
+    return unpacked
+end
+
+function legacy.dataPack(data) -- its a ######## pointer...
+
+    print('dataPack', data)
+    -- Player
+    data.player = data.player.UserId
+
+    -- Abilities
+    for i, ability in pairs(data.abilities) do
+        data.abilities[i] = {ability.name, ability.isLocked}
     end
 
     return data
-end
-
-function legacy.dataPack(old_data)
-    local new_data = old_data
-
-    -- Player
-    new_data.player = old_data.player.UserId
-
-    -- Abilities
-    for i, ability in pairs(old_data.abilities) do
-        table.insert(new_data.abilities, ability.name)
-    end
-
-    return new_data
 end
 
 function legacy.default(key)
     local tempabilities = require(s.rs.Common.ProgressionSystem_Shared.Templates.abilities)
     local default = {
         -- METADATA
-        ['player'] = s.plrs:GetPlayerByUserId(key), -- UserId
+        ['player'] = key, -- UserId
         ['faction'] = 'none',
         ['specialty'] = 'none',
         ['rank'] = 0, --TEMP
     
         -- STATS
-        ['level_points'] = 300, -- TEMP
-        ['ability_points'] = 500, -- TEMP
+        ['level_int'] = 300, -- TEMP
+        ['ability_int'] = 500, -- TEMP
     
         -- ABILITIES
         ['abilities'] = { -- TEMP / CANNOT BE CLASSES, MUST BE NAME STRINGS
-            'Pull', 'Push', 'Spark', 'Lightning'
+            {'Pull', true},
+            {'Push', true},
+            {'Spark', true},
+            {'Lightning', true}
         }
     }
 
@@ -68,6 +75,7 @@ function legacy.save(datastore, key, data)
     data = legacy.dataPack(data)
 
     local success, errorMessage = pcall(function()
+        print(key, data)
         datastore:SetAsync(key, data)
     end)
     if not success then
@@ -77,18 +85,16 @@ end
 
 function legacy.get(datastore, key)
     local data = datastore:GetAsync(key)
-    if data == nil or table.getn(data) == 0 then
-        print("Making default")
+    local actor
 
+    if data == nil then
+        print("Making default", data)
         data = legacy.default(key)
-
-        -- Must be saved before creating the classes
-        legacy.save(datastore, key, data)
-
-        data = legacy.dataUnpack(data)
     end
 
-    return data
+    print(data)
+    actor = legacy.dataUnpack(data)
+    return actor
 end
 
 -- Server Data Storage
@@ -96,7 +102,7 @@ SDS = {}
 
 -- Server Data Storage Functions
 function SDS.mountPlayer(Player)
-    local PlayerData = legacy.get(DS, Player.UserId)
+    local PlayerData = legacy.get(DS, Player.UserId) -- Actor object
     table.insert(SDS, Player.UserId, PlayerData)
 
     return SDS.getPlayer(Player)
@@ -106,10 +112,8 @@ function SDS.unmountPlayer(Player) -- I don't know if this is safe or not
     local function attemptSave(attempts)  -- Recursive
         local attempts = attempts or 0
         
-        print(attempts)
-
-        SDS[Player.UserId].abilities = legacy.simplifyAbilities(SDS[Player.UserId].abilities)
-        print(SDS[Player.UserId])
+        SDS[Player.UserId] = ActorStorage.getActor(SDS[Player.UserId])
+        ActorStorage.unmountActor(SDS[Player.UserId])
         
         local success, errorMessage = legacy.save(DS, Player.UserId, SDS[Player.UserId])
 

@@ -2,13 +2,17 @@ ActorStorage = {}
 -- Used to store Actor classes on the Server
 
 function ActorStorage.mountActor(Actor)
-    table.insert(ActorStorage, Actor.Player.UserId, Actor)
+    table.insert(ActorStorage, Actor.player.UserId, Actor)
 
-    return ActorStorage[Actor.Player.UserId]
+    return ActorStorage[Actor.player.UserId]
 end
 
 function ActorStorage.unmountActor(Actor)
-    ActorStorage[Actor.Player.UserId] = nil
+    ActorStorage[Actor.player.UserId] = nil
+end
+
+function ActorStorage.getActor(Actor)
+    return ActorStorage[Actor.player.UserId]
 end
 
 function ActorStorage.viewAllActors()

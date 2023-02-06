@@ -11,15 +11,16 @@ Actor.__index = Actor
 function Actor.new(player, args)
     local self = setmetatable({}, Actor)
 
+    print("Actor created by:", player, args)
     -- METADATA
-    self.Player = player
+    self.player = player
     self.faction = args.faction or 'neutral'
     self.specialty = args.specialty or 'none'
     self.rank = 255 --TEMP
 
     -- STATS
-    self.level_int = args.level_points or 0
-    self.ability_int = args.ability_points or 0
+    self.level_int = args.level_int or 0
+    self.ability_int = args.ability_int or 0
 
     -- ABILITIES
     self.abilities = Actor.createAbilityClasses(args.abilities)
@@ -27,6 +28,7 @@ function Actor.new(player, args)
     return self
 end
 
+-- THE THING IS HERE!!! DAMN THIS THING
 function Actor.createAbilityClasses(array)
     -- print("creating AbilityClasses")
     local new_array = {}
@@ -67,16 +69,17 @@ function Actor:unlock_ability(ability_name, ability_requirement, ability)
     local _Ability = abilities_available[GetIndexOfValue(abilities_available, ability_name)]
 
     -- NOTE: The unlock will have to run through Actor class instead of here; to check the ability points available.
-    local success, _error = ability:unlock(ability_requirement, abilities_available, self)
+    local success, message = ability:unlock(ability_requirement, abilities_available, self)
     if success then
+        print(message)
         self:remove_ability_point(ability.cost)
         return true
     end
-    return false, _error
+    return false, message
 end
 
 function Actor:repr()
-    print(self.Player.Name, self.faction, self.specialty, self.rank)
+    print(self.player.Name, self.faction, self.specialty, self.rank)
 end
 
 return Actor
